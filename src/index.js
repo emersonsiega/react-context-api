@@ -5,30 +5,36 @@ const paddingLeft = size => ({
     paddingLeft: `${size}px`
 })
 
-const Parent = ({name}) => {
+const Context = React.createContext()
+
+const Parent = () => {
     return (
         <div style={paddingLeft(10)}>
             <h1>Parent</h1>
-            <Child name={name}/>
+            <Child />
         </div>
     )
 }
 
-const Child = ({name}) => {
+const Child = () => {
     return (
         <div style={paddingLeft(15)}>
             <h1>Child</h1>
-            <Grandchild name={name}/>
+            <Grandchild/>
         </div>
     )
 }
 
-const Grandchild = ({name}) => {
+const Grandchild = () => {
     return (
-        <div style={paddingLeft(20)}>
-            <h1>Grandchild</h1>
-            <h3>Name: {name}</h3>
-        </div>
+        <Context.Consumer>
+            {(name) => (
+                <div style={paddingLeft(20)}>
+                    <h1>Grandchild</h1>
+                    <h3>Name: {name}</h3>
+                </div>
+            )}
+        </Context.Consumer>
     )
 }
 
@@ -37,7 +43,9 @@ class App extends Component {
         const name = 'Emerson'
 
         return (
-            <Parent name={name}/>
+            <Context.Provider value={name}>
+                <Parent/>
+            </Context.Provider>
         )
     }
 }
